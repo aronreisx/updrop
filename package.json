@@ -1,0 +1,23 @@
+{
+  "name": "updrop",
+  "version": "1.0.0",
+  "description": "File uploading app system using Socket.IO",
+  "main": "index.js",
+  "scripts": {
+    "start:client": "pnpm --filter client start",
+    "start:server": "pnpm --filter server start"
+  },
+  "keywords": ["uploading", "websocket", "stream", "socket.io"],
+  "author": "Aron Reis",
+  "license": "MIT",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aronreisx/updrop.git"
+  },
+  "workspaces": [
+    "packages/client",
+    "packages/server"
+  ],
+  "packageManager": "pnpm@9.12.2+sha512.22721b3a11f81661ae1ec68ce1a7b879425a1ca5b991c975b074ac220b187ce56c708fe5db69f4c962c989452eee76c82877f4ee80f474cebd61ee13461b6228"
+}
