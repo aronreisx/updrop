@@ -1,8 +1,8 @@
-const express = require("express");
-const http = require("http");
-const { Server } = require("socket.io");
-const fs = require("fs");
-const path = require("path");
+import express, { Request, Response } from "express";
+import http from "http";
+import { Server, Socket } from "socket.io";
+import fs from "fs";
+import path from "path";
 
 const app = express();
 const server = http.createServer(app);
@@ -19,20 +19,25 @@ if (!fs.existsSync(UPLOAD_DIR)) {
   fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 }
 
-io.on("connection", (socket) => {
+// Define interfaces for socket events
+interface FileStartData {
+  filename: string;
+}
+
+io.on("connection", (socket: Socket) => {
   console.log("Client connected");
 
-  let fileStream = null;
+  let fileStream: fs.WriteStream | null = null;
 
-  socket.on("file-start", ({ filename }) => {
+  socket.on("file-start", ({ filename }: FileStartData) => {
     console.log(`Starting file upload: ${filename}`);
     const filePath = path.join(UPLOAD_DIR, filename);
     fileStream = fs.createWriteStream(filePath);
   });
 
-  socket.on("file-chunk", (chunk) => {
+  socket.on("file-chunk", (chunk: Buffer) => {
     if (fileStream) {
-      fileStream.write(Buffer.from(chunk));
+      fileStream.write(chunk);
     }
   });
 
@@ -53,7 +58,7 @@ io.on("connection", (socket) => {
   });
 });
 
-app.get("/", (req, res) => {
+app.get("/", (req: Request, res: Response) => {
   res.send("Socket.IO File Upload Server is running");
 });
 
